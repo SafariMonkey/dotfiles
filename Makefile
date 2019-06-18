@@ -11,37 +11,40 @@ arch-packages:
 	# change PKGEXT to .pkg.tar, we don't need compression for AUR builds
 	sudo sed -i "s/PKGEXT='.pkg.tar.xz'/PKGEXT='.pkg.tar'/" /etc/makepkg.conf
 	
-	# Install cower and pacaur
-	$(call AUR_INSTALL,cower)
-	$(call AUR_INSTALL,pacaur)
+	# Install cower and yay
+	$(call AUR_INSTALL,yay)
 	
-	pacaur -S tig python python2 htop nmap fzf
+	yay -S tig python python2 htop nmap fzf
 
 .PHONY: arch-gui-packages
 arch-gui-packages:
-	pacaur -S xorg-xinit i3 dmenu termite feh \
+	yay -S xorg-xinit i3 dmenu termite feh \
 	          pulseaudio pavucontrol pulseaudio-alsa \
+	          bluez bluez-utils \
 	          noto-fonts noto-fonts-emoji noto-fonts-cjk \
 	          ttf-dejavu evince baudline-bin thunderbird \
-	          py3status-git scrot graphicsmagick
+	          py3status-git scrot graphicsmagick jq tmux
 
 .PHONY: arch-lib32
 arch-lib32:
 	# enable multilib and update package list
 	sudo sed -i "s|#[multilib]|[multilib]\nInclude = /etc/pacman.d/mirrorlist|" /etc/pacman.conf
-	pacaur -Syu
+	yay -Syu
 	
 	# install packages
-	pacaur -S lib32-libpulse steam
+	yay -S lib32-libpulse steam
+
+.PHONY: python-packages
+python-packages:
+	yay -S python2-pip
+	pip2 install --user hvac etcd==2.0.2 python-etcd==0.4.4 docker-py websocket-client==0.32.0
+	pip2 install --user --extra-index-url http://pypi.bespin.nboss.ntt.net/pypi --trusted-host pypi.bespin.nboss.ntt.net metro
+	yay -S python2-docopt python2-redis python2-trollius python2-voluptuous python2-termcolor python2-tabulate python2-gevent python2-yaml python2-tox python2-jinja python2-docker-pycreds
 
 .PHONY: configs
 configs:
 	./joinTheDots
 	chmod 700 ~/.ssh
-
-	mkdir -p ~/.local/man/man6/
-	ln -s ~/byond/use/man/man6/DreamMaker.6 ~/.local/man/man6/
-	ln -s ~/byond/use/man/man6/DreamDaemon.6 ~/.local/man/man6/
 
 .PHONY: git-prompt
 git-prompt:
@@ -64,6 +67,7 @@ git-repos:
 	mkdir -p ~/git
 	$(call github_clone,kragen/xcompose,~/git/xcompose)
 	$(call github_clone,ccontavalli/ssh-ident,~/git/ssh-ident)
+	ln -s ~/git/ssh-ident/ssh-ident ~/bin/ssh
 
 .PHONY: non-arch-git-repos
 non-arch-git-repos:

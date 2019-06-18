@@ -10,7 +10,7 @@ workspace_layout tabbed
 
 set $mod Mod4
 
-font pango:DejaVu Sans Mono 12
+font pango:DejaVu Sans Mono 10
 
 floating_modifier $mod
 
@@ -39,6 +39,10 @@ bindsym $mod+Shift+g split h
 bindsym $mod+Shift+v split v
 bindsym $mod+Shift+s split h, layout stacking
 bindsym $mod+Shift+w split h, layout tabbed
+bindsym $mod+g layout splith
+bindsym $mod+v layout splitv
+bindsym $mod+f fullscreen toggle
+bindsym $mod+Shift+f fullscreen toggle global
 
 bindsym $mod+g layout splith
 bindsym $mod+v layout splitv
@@ -53,7 +57,7 @@ bindsym $mod+Shift+space floating toggle
 bindsym $mod+space focus mode_toggle
 
 bindsym $mod+a focus parent
-#bindsym $mod+d focus child
+bindsym $mod+z focus child
 
 bindsym $mod+1 workspace 1
 bindsym $mod+2 workspace 2
@@ -65,6 +69,7 @@ bindsym $mod+7 workspace 7
 bindsym $mod+8 workspace 8
 bindsym $mod+9 workspace 9
 bindsym $mod+0 workspace 10
+bindsym $mod+Tab workspace back_and_forth
 
 bindsym $mod+Shift+1 move container to workspace 1
 bindsym $mod+Shift+2 move container to workspace 2
@@ -76,6 +81,7 @@ bindsym $mod+Shift+7 move container to workspace 7
 bindsym $mod+Shift+8 move container to workspace 8
 bindsym $mod+Shift+9 move container to workspace 9
 bindsym $mod+Shift+0 move container to workspace 10
+bindsym $mod+Shift+Tab move container to workspace back_and_forth
 
 bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
@@ -137,4 +143,16 @@ for_window [class="i3:fullscreen"] fullscreen enable
 for_window [class="i3:fullscreenglobal"] fullscreen enable global
 for_window [title="PyLNP"] floating enable
 
+# exec "xrandr --dpi 500"
 exec ~/dotfiles/layouts/main.sh
+
+# Pulse Audio controls
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
+
+# Media player controls
+bindsym XF86AudioPlay exec playerctl play-pause
+bindsym XF86AudioPause exec playerctl pause
+bindsym XF86AudioNext exec playerctl next
+bindsym XF86AudioPrev exec playerctl previous

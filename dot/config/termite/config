@@ -1,5 +1,5 @@
 [options]
-font = Deja Vu Sans Mono 14
+font = Deja Vu Sans Mono 10
 scrollback_lines = 10000
 audible_bell = true
 

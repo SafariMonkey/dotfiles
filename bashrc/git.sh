@@ -51,3 +51,8 @@ wgs() {
 		git stash pop
 	fi
 }
+
+gitfind ()
+{
+    ls --color=auto | grep --color=auto -vF '.' | xargs -I{} bash -c "tput bold; tput setaf 3; echo {}; tput sgr0; cd {}; if [ -d ./.git ]; then git --no-pager grep -En '$1'; fi"
+}
