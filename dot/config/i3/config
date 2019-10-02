@@ -39,10 +39,6 @@ bindsym $mod+Shift+g split h
 bindsym $mod+Shift+v split v
 bindsym $mod+Shift+s split h, layout stacking
 bindsym $mod+Shift+w split h, layout tabbed
-bindsym $mod+g layout splith
-bindsym $mod+v layout splitv
-bindsym $mod+f fullscreen toggle
-bindsym $mod+Shift+f fullscreen toggle global
 
 bindsym $mod+g layout splith
 bindsym $mod+v layout splitv
@@ -156,3 +152,6 @@ bindsym XF86AudioPlay exec playerctl play-pause
 bindsym XF86AudioPause exec playerctl pause
 bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
+
+# # MPD media player control listener
+# exec --no-startup-id mpDris2

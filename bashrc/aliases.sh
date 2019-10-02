@@ -4,6 +4,7 @@ alias lh='ls -sh'
 alias ll='ls -alFh'
 alias la='ls -Ah'
 alias l='ls -CFh'
+alias cat='bat'
 
 alias sprunge='curl -F "sprunge=<-" http://sprunge.us'
 

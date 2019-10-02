@@ -1,0 +1,77 @@
+#!/bin/bash
+# Usage: rate-music [great, good, decent, meh, terrible]
+#
+# Adds current playing song to a m3u playlist corresponding to the rating
+# assigned. Any previous rating is removed. If no argument is given, the song
+# will be removed from all playlists.
+
+RATINGS=( great good decent meh terrible )
+
+# Path to playlists
+playlists="$HOME/Music/playlists"
+
+# Prefix and suffix strings for the playlist file name
+pl_prefix='rated-'
+pl_suffix='.m3u'
+
+# Get current song from cmus
+# song=$(cmus-remote -Q | grep file)
+song=$(mpc current)
+
+# Error cases
+if [ -z "$song" ]; then
+    echo 'No song is playing.'
+    exit 1
+fi
+
+# If there is no paramter passed
+if [ $# -eq 0 ]; then
+    # Find the song in playlists and print their names
+    for r in "${RATINGS[@]}"; do
+        f="$playlists/${pl_prefix}$r${pl_suffix}"
+        if [ -f "$f" ]; then
+            if grep -F "$song" "$f" > /dev/null; then
+                echo "$r"
+				exit 0
+    		fi
+        fi
+    done
+    exit 1
+fi
+
+if ! [[ " ${RATINGS[*]} " == *" $1 "* ]]; then
+	echo "Rating level not recognised, expected one of (${RATINGS[@]})"
+	exit 1
+fi
+
+# Path to lock file
+lock="/tmp/music-rate.lock"
+
+# Lock the file (other atomic alternatives would be "ln" or "mkdir")
+exec 9>"$lock"
+if ! flock -n 9; then
+    notify-send "Rating failed: Another instance is running."
+    exit 1
+fi
+
+# Strip "file " from the output
+song=${song/file \///}
+
+# Temporary file for grepping and sorting
+tmp="$playlists/tmp.m3u"
+
+# Remove the song from all rating playlists
+for r in "${RATINGS[@]}"; do
+    f="$playlists/${pl_prefix}$r${pl_suffix}"
+    if [ -f "$f" ]; then
+        grep -vF "$song" "$f" > "$tmp"
+        mv -f "$tmp" "$f"
+    fi
+done
+
+# Append the song to the new rating playlist
+f="$playlists/${pl_prefix}$1${pl_suffix}"
+mkdir -p "$playlists"
+echo "$song" >> "$f"
+sort -u "$f" -o "$tmp"
+mv -f "$tmp" "$f"

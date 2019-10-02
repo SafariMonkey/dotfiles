@@ -5,3 +5,5 @@
 for k in $HOME/dotfiles/bashrc/*; do
 	source "$k"
 done
+
+[[ -s "/home/charlton/.gvm/scripts/gvm" ]] && source "/home/charlton/.gvm/scripts/gvm"

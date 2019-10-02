@@ -122,7 +122,7 @@ class Py3status:
 
         items.append({
             "full_text": " ".join(memitems),
-            "color": self._color(max(0, (0.5 * memT / memA) - 1)),
+            "color": self._color(max(0, (0.3 * memT / memA) - 1)),
             "separator": True,
             "a": 2,
         })

@@ -23,7 +23,8 @@ arch-gui-packages:
 	          bluez bluez-utils \
 	          noto-fonts noto-fonts-emoji noto-fonts-cjk \
 	          ttf-dejavu evince baudline-bin thunderbird \
-	          py3status-git scrot graphicsmagick jq tmux
+	          py3status-git scrot graphicsmagick jq tmux \
+	          httpie zip
 
 .PHONY: arch-lib32
 arch-lib32:
